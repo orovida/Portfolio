@@ -48,6 +48,7 @@
         .aurora-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0; mix-blend-mode: screen; transform: scale(0.8); }
         .blob-1 { top: -20%; left: -20%; width: 60vw; height: 60vw; background: var(--accent); }
         .blob-2 { bottom: -20%; right: -20%; width: 50vw; height: 50vw; background: #0047ff; filter: blur(120px); }
+        .blob-3 { top: 30%; right: -10%; width: 40vw; height: 40vw; background: #0047ff; filter: blur(120px); }
 
         /* --- HERO --- */
         .hero { height: 100vh; display: flex; align-items: center; padding: 0 10vw; perspective: 1000px; }
@@ -76,20 +77,17 @@
             margin-bottom: 3rem; display: block; opacity: 0; transform: translateY(20px);
         }
 
-        /* Smaller cards, bigger gap */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 50px; max-width: 1200px; margin: 0 auto; }
         
         .video-card { 
             background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 12px; 
             display: block; text-decoration: none; color: white; 
-            /* REMOVED CSS TRANSFORM to allow Magnetic JS to work */
             transition: box-shadow 0.4s ease, border-color 0.4s ease; 
             opacity: 0; transform: translateY(30px);
         }
         .thumb-container { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; position: relative; }
         .thumb-container img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.6); transition: 0.6s ease; transform: scale(1.02); }
         
-        /* Hover Effects */
         .video-card:hover { 
             border-color: rgba(255, 69, 0, 0.4); 
             box-shadow: 0 15px 40px rgba(0,0,0,0.4);
@@ -98,7 +96,6 @@
         
         .video-title { margin-top: 15px; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: -0.5px; margin-left: 5px; }
 
-        /* Social Items */
         .social-item { 
             display: flex; justify-content: space-between; padding: 1.8rem; 
             background: var(--glass); border: 1px solid var(--border); border-radius: 14px; 
@@ -107,7 +104,6 @@
         }
         .social-item:hover { background: rgba(255,255,255,0.08); }
 
-        /* --- COLLAB SECTION --- */
         .collab-wrapper { padding: 0 8vw; } 
         .collab-card {
             position: relative;
@@ -134,8 +130,8 @@
         #video-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; opacity: 0; padding: 20px; backdrop-filter: blur(10px); }
         .modal-inner { height: 100%; display: flex; align-items: center; justify-content: center; }
         .modal-content { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 20px; }
-        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,0,0,0.5); background: #000; }
+        #modal-player { position: absolute; inset: 0; width: 100%; height: 100%; }
         .close-btn { align-self: flex-end; color: white; font-weight: 900; font-size: 14px; letter-spacing: 2px; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; }
 
         .footer { padding-bottom: 40px; text-align: center; }
@@ -149,20 +145,9 @@
             .collab-card h2 { font-size: 2rem; }
             section { padding: 0 6vw; }
         }
-        .about-content {
-            max-width: 800px;
-        }
-        .about-p {
-            font-size: 1.2rem;
-            line-height: 1.3;
-            color: #ccc;
-            margin-bottom: 0.5rem;
-            font-weight: 400;
-        }
-        .about-p strong {
-            color: var(--accent);
-            font-weight: 700;
-        }
+        .about-content { max-width: 800px; }
+        .about-p { font-size: 1.2rem; line-height: 1.4; color: #ccc; margin-bottom: 0.8rem; font-weight: 400; }
+        .about-p strong { color: var(--accent); font-weight: 700; }
     </style>
 </head>
 <body>
@@ -188,6 +173,7 @@
     <div class="aurora-wrapper">
         <div class="aurora-blob blob-1"></div>
         <div class="aurora-blob blob-2"></div>
+        <div class="aurora-blob blob-3"></div>
     </div>
 
     <section class="hero">
@@ -230,21 +216,13 @@
     <section id="works">
         <span class="section-label reveal-text">Selected Works</span>
         <div class="grid">
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('ID_1')">
-                <div class="thumb-container"><img src="https://drive.google.com/thumbnail?sz=w1000&id=ID_1"></div>
+            <div class="video-card magnetic-target reveal-card" onclick="openVideo('podcast edit.mp4')">
+                <div class="thumb-container"><img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK"></div>
                 <div class="video-title">Montage Edit</div>
             </div>
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('ID_2')">
-                <div class="thumb-container"><img src="https://drive.google.com/thumbnail?sz=w1000&id=ID_2"></div>
-                <div class="video-title">Vlog Color Grade</div>
-            </div>
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('ID_3')">
-                <div class="thumb-container"><img src="https://drive.google.com/thumbnail?sz=w1000&id=ID_3"></div>
-                <div class="video-title">Commercial</div>
-            </div>
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK')">
+            <div class="video-card magnetic-target reveal-card" onclick="openVideo('video2.mp4')">
                 <div class="thumb-container"><img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK"></div>
-                <div class="video-title">Documentary</div>
+                <div class="video-title">Vlog Color Grade</div>
             </div>
         </div>
     </section>
@@ -252,10 +230,10 @@
     <section id="accounts">
         <span class="section-label reveal-text">Channels</span>
         <div class="social-list">
-            <a href="https://www.fiverr.com/orovida_yt" class="social-item magnetic-target reveal-card"><span>Fiverr</span><span>↗</span></a>
-            <a href="https://www.youtube.com/@Orovida_yt" class="social-item magnetic-target reveal-card"><span>YouTube</span><span>↗</span></a>
-            <a href="https://www.instagram.com/orovida_og" class="social-item magnetic-target reveal-card"><span>Instagram</span><span>↗</span></a>
-            <a href="https://x.com/Orovida_OG" class="social-item magnetic-target reveal-card"><span>X</span><span>↗</span></a>
+            <a href="https://www.fiverr.com/orovida_yt" target="_blank" class="social-item magnetic-target reveal-card"><span>Fiverr</span><span>↗</span></a>
+            <a href="https://www.youtube.com/@Orovida_yt" target="_blank" class="social-item magnetic-target reveal-card"><span>YouTube</span><span>↗</span></a>
+            <a href="https://www.instagram.com/orovida_og" target="_blank" class="social-item magnetic-target reveal-card"><span>Instagram</span><span>↗</span></a>
+            <a href="https://x.com/Orovida_OG" target="_blank" class="social-item magnetic-target reveal-card"><span>X</span><span>↗</span></a>
         </div>
     </section>
 
@@ -276,37 +254,27 @@
     <script>
         const cursor = document.getElementById('cursor');
 
-        // --- 1. GLOBAL CURSOR FOLLOWER ---
+        // --- 1. GLOBAL CURSOR ---
         window.addEventListener('mousemove', (e) => {
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
         });
 
-        // --- 2. THE EXACT MAGNETIC LOGIC YOU REQUESTED ---
+        // --- 2. MAGNETIC LOGIC ---
         document.querySelectorAll('.magnetic-target').forEach(el => {
-            
-            // Hover: Cursor gets slightly bigger (1.5x)
-            el.addEventListener('mouseenter', () => {
-                gsap.to(cursor, { scale: 1.5 }); 
-            });
-
-            // Leave: Reset everything
+            el.addEventListener('mouseenter', () => { gsap.to(cursor, { scale: 1.5 }); });
             el.addEventListener('mouseleave', () => {
                 gsap.to(cursor, { scale: 1 });
-                // Elastic snap back
                 gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
             });
-
-            // Move: The "Magnet" effect (Logic from your snippet)
             el.addEventListener('mousemove', (e) => {
                 const rect = el.getBoundingClientRect();
-                // I increased strength slightly to 0.2 so you can feel it more
                 const x = (e.clientX - rect.left - rect.width/2) * 0.2; 
                 const y = (e.clientY - rect.top - rect.height/2) * 0.2;
                 gsap.to(el, { x: x, y: y, duration: 0.3 });
             });
         });
 
-        // --- LOAD SEQUENCE ---
+        // --- 3. LOAD SEQUENCE ---
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
             tl.to(".loader-text", { opacity: 1, duration: 0.5 })
@@ -320,7 +288,7 @@
               .to(".aurora-blob", { opacity: 0.15, scale: 1, duration: 2 }, "-=1.5");
         });
 
-        // --- SCROLL ANIMATIONS ---
+        // --- 4. SCROLL TRIGGER ---
         gsap.registerPlugin(ScrollTrigger);
         
         gsap.utils.toArray(".reveal-card").forEach((el) => {
@@ -344,12 +312,19 @@
             scrollTrigger: { scrub: 0.3 }
         });
 
-        // --- VIDEO MODAL ---
+        // --- 5. UPDATED VIDEO MODAL (GITHUB FRIENDLY) ---
         const modal = document.getElementById('video-modal');
-        function openVideo(id) {
+        function openVideo(file) {
             const player = document.getElementById('modal-player');
-            // Added allowfullscreen and fixed the template literal
-            player.innerHTML = `<iframe src="https://drive.google.com/file/d/${id}/preview" allow="autoplay" allowfullscreen></iframe>`;
+            // This detects if you are using a Drive ID or a local file
+            const source = file.length > 20 ? `https://drive.google.com/file/d/${file}/preview` : file;
+            
+            if(file.includes('.mp4')) {
+                player.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${file}" type="video/mp4"></video>`;
+            } else {
+                player.innerHTML = `<iframe src="${source}" allow="autoplay" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+            }
+            
             modal.style.display = 'block';
             gsap.to(modal, { opacity: 1, duration: 0.4 });
             document.body.style.overflow = 'hidden';
@@ -370,5 +345,3 @@
     </script>
 </body>
 </html>
-
-
