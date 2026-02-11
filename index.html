@@ -72,10 +72,7 @@
 
         /* --- GRID & CARDS --- */
         section { padding: 0 10vw; margin-bottom: 15vh; position: relative; z-index: 2; }
-        .section-label { 
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: var(--accent); 
-            margin-bottom: 3rem; display: block; opacity: 0; transform: translateY(20px);
-        }
+        .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 3rem; display: block; opacity: 0; transform: translateY(20px); }
 
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 50px; max-width: 1200px; margin: 0 auto; }
         
@@ -85,44 +82,31 @@
             transition: box-shadow 0.4s ease, border-color 0.4s ease; 
             opacity: 0; transform: translateY(30px);
         }
-        .thumb-container { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; position: relative; }
-        .thumb-container img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.6); transition: 0.6s ease; transform: scale(1.02); }
-        
-        .video-card:hover { 
-            border-color: rgba(255, 69, 0, 0.4); 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+
+        /* --- THUMBNAIL HOVER LOGIC --- */
+        .thumb-container { 
+            width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; position: relative; background: #000;
         }
-        .video-card:hover img { filter: grayscale(0) brightness(1); transform: scale(1.08); }
-        
+        .thumb-container img { 
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; 
+            z-index: 2; transition: opacity 0.4s ease; filter: grayscale(0.5);
+        }
+        .thumb-container video {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .video-card:hover .thumb-container img { opacity: 0; }
+        .video-card:hover { border-color: rgba(255, 69, 0, 0.4); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+
         .video-title { margin-top: 15px; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: -0.5px; margin-left: 5px; }
 
-        .social-item { 
-            display: flex; justify-content: space-between; padding: 1.8rem; 
-            background: var(--glass); border: 1px solid var(--border); border-radius: 14px; 
-            text-decoration: none; color: white; font-weight: 900; margin-bottom: 15px; 
-            opacity: 0; transform: translateY(30px); transition: background 0.3s; 
-        }
+        .social-item { display: flex; justify-content: space-between; padding: 1.8rem; background: var(--glass); border: 1px solid var(--border); border-radius: 14px; text-decoration: none; color: white; font-weight: 900; margin-bottom: 15px; opacity: 0; transform: translateY(30px); transition: background 0.3s; }
         .social-item:hover { background: rgba(255,255,255,0.08); }
 
         .collab-wrapper { padding: 0 8vw; } 
-        .collab-card {
-            position: relative;
-            background: radial-gradient(circle at center, rgba(255,69,0,0.15) 0%, rgba(0,0,0,0) 70%), var(--glass);
-            border: 1px solid var(--border); border-radius: 30px;
-            padding: 90px 20px; text-align: center;
-            overflow: hidden; opacity: 0; transform: scale(0.95);
-        }
-        .collab-card h2 { font-size: 3.5vw; font-weight: 900; line-height: 1; margin-bottom: 2rem; text-transform: uppercase; }
-        .collab-btn {
-            position: relative; display: inline-block;
-            padding: 1.2rem 3.5rem; background: white; color: black;
-            border-radius: 100px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
-            text-decoration: none; z-index: 2; overflow: hidden;
-        }
-        .collab-btn::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
-            background: var(--accent); z-index: -1; transition: 0.4s ease;
-        }
+        .collab-card { position: relative; background: radial-gradient(circle at center, rgba(255,69,0,0.15) 0%, rgba(0,0,0,0) 70%), var(--glass); border: 1px solid var(--border); border-radius: 30px; padding: 90px 20px; text-align: center; overflow: hidden; opacity: 0; transform: scale(0.95); }
+        .collab-card h2 { font-size: 3.5vw; font-weight: 900; margin-bottom: 2rem; text-transform: uppercase; }
+        .collab-btn { position: relative; display: inline-block; padding: 1.2rem 3.5rem; background: white; color: black; border-radius: 100px; font-weight: 900; text-transform: uppercase; text-decoration: none; z-index: 2; overflow: hidden; }
+        .collab-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%; background: var(--accent); z-index: -1; transition: 0.4s ease; }
         .collab-btn:hover::before { width: 100%; }
         .collab-btn:hover { color: white; }
 
@@ -130,23 +114,16 @@
         #video-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; opacity: 0; padding: 20px; backdrop-filter: blur(10px); }
         .modal-inner { height: 100%; display: flex; align-items: center; justify-content: center; }
         .modal-content { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 20px; }
-        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 0 50px rgba(0,0,0,0.5); background: #000; }
+        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #000; }
         #modal-player { position: absolute; inset: 0; width: 100%; height: 100%; }
         .close-btn { align-self: flex-end; color: white; font-weight: 900; font-size: 14px; letter-spacing: 2px; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; }
 
         .footer { padding-bottom: 40px; text-align: center; }
         .copyright { color: #555; font-size: 11px; letter-spacing: 3px; margin-top: 60px; text-transform: uppercase; }
 
-        @media (max-width: 768px) { 
-            * { cursor: auto !important; } #cursor { display: none; }
-            .hero h1 { font-size: 9vw; white-space: normal; }
-            .grid { grid-template-columns: 1fr; gap: 30px; }
-            .hero-flex { flex-direction: column-reverse; gap: 30px; }
-            .collab-card h2 { font-size: 2rem; }
-            section { padding: 0 6vw; }
-        }
+        @media (max-width: 768px) { * { cursor: auto !important; } #cursor { display: none; } .hero h1 { font-size: 9vw; white-space: normal; } .grid { grid-template-columns: 1fr; gap: 30px; } .hero-flex { flex-direction: column-reverse; gap: 30px; } .collab-card h2 { font-size: 2rem; } section { padding: 0 6vw; } }
         .about-content { max-width: 800px; }
-        .about-p { font-size: 1.2rem; line-height: 1.4; color: #ccc; margin-bottom: 0.8rem; font-weight: 400; }
+        .about-p { font-size: 1.2rem; line-height: 1.4; color: #ccc; margin-bottom: 0.8rem; }
         .about-p strong { color: var(--accent); font-weight: 700; }
     </style>
 </head>
@@ -197,34 +174,34 @@
     <section id="about">
         <span class="section-label reveal-text">About Me</span>
         <div class="about-content">
-            <p class="about-p reveal-text">
-                I’m Orovida, a video editor focused on clean, cinematic storytelling and high-retention edits. 
-            </p>
-            <p class="about-p reveal-text">
-                I’ve been learning and practicing video editing for over <strong>3–4 years</strong>, 
-                experimenting with different styles and improving through real projects and personal work.
-            </p>
-            <p class="about-p reveal-text">
-                I specialize in minimalist edits, smooth pacing, and visuals that support the story without unnecessary effects. 
-            </p>
-            <p class="about-p reveal-text">
-                Currently available for <strong>freelance collaborations</strong>.
-            </p>
+            <p class="about-p reveal-text">I’m Orovida, a video editor focused on clean, cinematic storytelling and high-retention edits.</p>
+            <p class="about-p reveal-text">I’ve been learning and practicing video editing for over <strong>3–4 years</strong>, experimenting with different styles and improving through real projects and personal work.</p>
+            <p class="about-p reveal-text">I specialize in minimalist edits, smooth pacing, and visuals that support the story without unnecessary effects.</p>
+            <p class="about-p reveal-text">Currently available for <strong>freelance collaborations</strong>.</p>
         </div>
     </section>
 
     <section id="works">
         <span class="section-label reveal-text">Selected Works</span>
         <div class="grid">
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('podcast edit.mp4')">
-                <div class="thumb-container"><img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK"></div>
-                <div class="video-title">Montage Edit</div>
+            <div class="video-card magnetic-target reveal-card" 
+                 onmouseenter="this.querySelector('video').play()" 
+                 onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;"
+                 onclick="openVideo('full-video.mp4')">
+                <div class="thumb-container">
+                    <img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK" alt="Teaser Thumb">
+                    <video muted loop playsinline>
+                        <source src="preview.m4v" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-title">Coming Soon (Teaser)</div>
             </div>
+
             <div class="video-card magnetic-target reveal-card" onclick="openVideo('video2.mp4')">
-                <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;">
-                    <source src="Comming Soon.m4v" type="video/mp4">
-                </video>
-                <div class="video-title">Vlog Color Grade</div>
+                <div class="thumb-container">
+                    <img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK">
+                </div>
+                <div class="video-title">Project Showcase</div>
             </div>
         </div>
     </section>
@@ -243,9 +220,7 @@
         <div class="collab-card reveal-big">
             <h2>Have an Idea?</h2>
             <p style="color: #999; margin-bottom: 40px; font-size: 1.1rem;">Let's build something cinematic together.</p>
-            <a href="mailto:orovidayt@gmail.com?subject=Project Inquiry" class="collab-btn magnetic-target">
-                Start a Project
-            </a>
+            <a href="mailto:orovidayt@gmail.com?subject=Project Inquiry" class="collab-btn magnetic-target">Start a Project</a>
         </div>
     </section>
 
@@ -292,39 +267,26 @@
 
         // --- 4. SCROLL TRIGGER ---
         gsap.registerPlugin(ScrollTrigger);
-        
         gsap.utils.toArray(".reveal-card").forEach((el) => {
-            gsap.to(el, {
-                opacity: 1, y: 0, duration: 0.8, ease: "power3.out",
-                scrollTrigger: { trigger: el, start: "top 90%" }
-            });
+            gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
         });
-
         gsap.utils.toArray(".reveal-text").forEach(el => {
             gsap.to(el, { opacity: 1, y: 0, duration: 1, scrollTrigger: { trigger: el, start: "top 90%" } });
         });
+        gsap.to(".reveal-big", { opacity: 1, scale: 1, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#contact", start: "top 80%" } });
+        gsap.to(".progress-bar", { width: "100%", ease: "none", scrollTrigger: { scrub: 0.3 } });
 
-        gsap.to(".reveal-big", {
-            opacity: 1, scale: 1, duration: 1, ease: "power3.out",
-            scrollTrigger: { trigger: "#contact", start: "top 80%" }
-        });
-
-        gsap.to(".progress-bar", {
-            width: "100%", ease: "none",
-            scrollTrigger: { scrub: 0.3 }
-        });
-
-        // --- 5. UPDATED VIDEO MODAL (GITHUB FRIENDLY) ---
+        // --- 5. MODAL LOGIC (.MP4 & .M4V SUPPORT) ---
         const modal = document.getElementById('video-modal');
         function openVideo(file) {
             const player = document.getElementById('modal-player');
-            // This detects if you are using a Drive ID or a local file
-            const source = file.length > 20 ? `https://drive.google.com/file/d/${file}/preview` : file;
+            // Check if file is a local video or a Google Drive ID
+            const isLocalVideo = file.includes('.mp4') || file.includes('.m4v');
             
-            if(file.includes('.mp4')) {
+            if(isLocalVideo) {
                 player.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${file}" type="video/mp4"></video>`;
             } else {
-                player.innerHTML = `<iframe src="${source}" allow="autoplay" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
+                player.innerHTML = `<iframe src="https://drive.google.com/file/d/${file}/preview" allow="autoplay" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
             }
             
             modal.style.display = 'block';
@@ -347,5 +309,3 @@
     </script>
 </body>
 </html>
-
-
