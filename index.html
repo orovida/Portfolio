@@ -184,24 +184,26 @@
     <section id="works">
         <span class="section-label reveal-text">Selected Works</span>
         <div class="grid">
+
+            <div class="video-card magnetic-target reveal-card" onclick="openVideo('podcast edit.mp4')">
+                <div class="thumb-container">
+                    <video muted loop playsinline>
+                        <source src="podcast edit.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="video-title">Podcast Video</div>
+            </div>
             <div class="video-card magnetic-target reveal-card" 
                  onmouseenter="this.querySelector('video').play()" 
                  onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;"
                  onclick="openVideo('podcast edit.mp4')">
                 <div class="thumb-container">
-                    <img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK" alt="Teaser Thumb">
+                    <img src="Comming Soon.m4v" alt="Teaser Thumb">
                     <video muted loop playsinline>
-                        <source src="preview.m4v" type="video/mp4">
+                        <source src="Comming Soon.m4v" type="video/mp4">
                     </video>
                 </div>
                 <div class="video-title">Coming Soon (Teaser)</div>
-            </div>
-
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('video2.mp4')">
-                <div class="thumb-container">
-                    <img src="https://drive.google.com/thumbnail?sz=w1000&id=1-dZ4GO1BMIXp8Xd2aFNP46I10MVykqrK">
-                </div>
-                <div class="video-title">Project Showcase</div>
             </div>
         </div>
     </section>
@@ -309,4 +311,5 @@
     </script>
 </body>
 </html>
+
 
