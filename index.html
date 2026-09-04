@@ -3,315 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orovida Portfolio</title>
-    
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
-
-    <style>
-        :root {
-            --bg: #050505;
-            --text: #ffffff;
-            --accent: #ff4500; 
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-        }
-
-        /* --- CORE --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Satoshi', sans-serif; overflow-x: hidden; }
-
-        /* --- PROGRESS & LOADER --- */
-        .progress-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 2px; z-index: 900; pointer-events: none; }
-        .progress-bar { width: 0%; height: 100%; background: var(--accent); }
-
-        #loader {
-            position: fixed; inset: 0; background: #000; z-index: 999999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .loader-text { font-weight: 900; font-size: 1.5rem; letter-spacing: 15px; margin-bottom: 20px; opacity: 0; }
-        .loader-line-mask { width: 200px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; position: relative; }
-        .loader-line { position: absolute; top: 0; left: 0; width: 0%; height: 100%; background: var(--accent); }
-
-        /* --- CURSOR --- */
-        #cursor {
-            position: fixed; width: 10px; height: 10px; background: white; border-radius: 50%;
-            pointer-events: none; z-index: 100000; mix-blend-mode: difference;
-            transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s;
-        }
-
-        /* --- BACKGROUND --- */
-        .aurora-wrapper { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-        .aurora-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0; mix-blend-mode: screen; transform: scale(0.8); }
-        .blob-1 { top: -20%; left: -20%; width: 60vw; height: 60vw; background: var(--accent); }
-        .blob-2 { bottom: -20%; right: -20%; width: 50vw; height: 50vw; background: #0047ff; filter: blur(120px); }
-        .blob-3 { top: 30%; right: -10%; width: 40vw; height: 40vw; background: #0047ff; filter: blur(120px); }
-
-        /* --- HERO --- */
-        .hero { height: 100vh; display: flex; align-items: center; padding: 0 10vw; perspective: 1000px; }
-        .hero-flex { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 40px; }
-        
-        .hero-line { overflow: hidden; }
-        .hero h1 { 
-            font-size: 4.2vw; line-height: 1.15; text-transform: uppercase; font-weight: 900; 
-            letter-spacing: -0.04em; transform: translateY(120%); white-space: nowrap; 
-        }
-        
-        .profile-wrapper { position: relative; width: 260px; height: 260px; }
-        .profile-box {
-            width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
-            border: 1px solid var(--accent); padding: 8px; 
-            opacity: 0; transform: scale(0.5) rotate(-10deg);
-            filter: grayscale(1); transition: filter 1s ease;
-        }
-        .profile-box.active { filter: grayscale(0); }
-        .profile-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-
-        /* --- GRID & CARDS --- */
-        section { padding: 0 10vw; margin-bottom: 15vh; position: relative; z-index: 2; }
-        .section-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 3rem; display: block; opacity: 0; transform: translateY(20px); }
-
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 50px; max-width: 1200px; margin: 0 auto; }
-        
-        .video-card { 
-            background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 12px; 
-            display: block; text-decoration: none; color: white; 
-            transition: box-shadow 0.4s ease, border-color 0.4s ease; 
-            opacity: 0; transform: translateY(30px);
-        }
-
-        /* --- THUMBNAIL HOVER LOGIC --- */
-        .thumb-container { 
-            width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 8px; position: relative; background: #000;
-        }
-        .thumb-container img { 
-            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; 
-            z-index: 2; transition: opacity 0.4s ease; filter: grayscale(0.5);
-        }
-        .thumb-container video {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-        .video-card:hover .thumb-container img { opacity: 0; }
-        .video-card:hover { border-color: rgba(255, 69, 0, 0.4); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
-
-        .video-title { margin-top: 15px; font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: -0.5px; margin-left: 5px; }
-
-        .social-item { display: flex; justify-content: space-between; padding: 1.8rem; background: var(--glass); border: 1px solid var(--border); border-radius: 14px; text-decoration: none; color: white; font-weight: 900; margin-bottom: 15px; opacity: 0; transform: translateY(30px); transition: background 0.3s; }
-        .social-item:hover { background: rgba(255,255,255,0.08); }
-
-        .collab-wrapper { padding: 0 8vw; } 
-        .collab-card { position: relative; background: radial-gradient(circle at center, rgba(255,69,0,0.15) 0%, rgba(0,0,0,0) 70%), var(--glass); border: 1px solid var(--border); border-radius: 30px; padding: 90px 20px; text-align: center; overflow: hidden; opacity: 0; transform: scale(0.95); }
-        .collab-card h2 { font-size: 3.5vw; font-weight: 900; margin-bottom: 2rem; text-transform: uppercase; }
-        .collab-btn { position: relative; display: inline-block; padding: 1.2rem 3.5rem; background: white; color: black; border-radius: 100px; font-weight: 900; text-transform: uppercase; text-decoration: none; z-index: 2; overflow: hidden; }
-        .collab-btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%; background: var(--accent); z-index: -1; transition: 0.4s ease; }
-        .collab-btn:hover::before { width: 100%; }
-        .collab-btn:hover { color: white; }
-
-        /* --- MODAL --- */
-        #video-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; opacity: 0; padding: 20px; backdrop-filter: blur(10px); }
-        .modal-inner { height: 100%; display: flex; align-items: center; justify-content: center; }
-        .modal-content { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 20px; }
-        .video-wrapper { position: relative; width: 100%; padding-top: 56.25%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #000; }
-        #modal-player { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .close-btn { align-self: flex-end; color: white; font-weight: 900; font-size: 14px; letter-spacing: 2px; padding: 10px 20px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; }
-
-        .footer { padding-bottom: 40px; text-align: center; }
-        .copyright { color: #555; font-size: 11px; letter-spacing: 3px; margin-top: 60px; text-transform: uppercase; }
-
-        @media (max-width: 768px) { * { cursor: auto !important; } #cursor { display: none; } .hero h1 { font-size: 9vw; white-space: normal; } .grid { grid-template-columns: 1fr; gap: 30px; } .hero-flex { flex-direction: column-reverse; gap: 30px; } .collab-card h2 { font-size: 2rem; } section { padding: 0 6vw; } }
-        .about-content { max-width: 800px; }
-        .about-p { font-size: 1.2rem; line-height: 1.4; color: #ccc; margin-bottom: 0.8rem; }
-        .about-p strong { color: var(--accent); font-weight: 700; }
-    </style>
+    <meta name="description" content="Orovida is an independent video editor creating cinematic, minimalist, high-retention content.">
+    <meta name="theme-color" content="#050505">
+    <meta property="og:title" content="Orovida | Independent Video Editor">
+    <meta property="og:description" content="Cinematic video editing and freelance collaborations by Orovida.">
+    <meta property="og:type" content="website">
+    <title>Orovida | Independent Video Editor</title>
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
+    <div class="progress-wrap" aria-hidden="true"><div class="progress-bar"></div></div>
+    <div id="loader" aria-hidden="true"><div class="loader-text">OROVIDA</div><div class="loader-line-mask"><div class="loader-line"></div></div></div>
+    <div id="cursor" aria-hidden="true"></div>
 
-    <div class="progress-wrap"><div class="progress-bar"></div></div>
-
-    <div id="loader">
-        <div class="loader-text">OROVIDA</div>
-        <div class="loader-line-mask"><div class="loader-line"></div></div>
+    <div id="video-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true" hidden>
+        <div class="modal-inner"><div class="modal-content">
+            <button class="close-btn magnetic-target" type="button">Close</button>
+            <h2 id="modal-title" class="visually-hidden">Video player</h2>
+            <div class="video-wrapper"><div id="modal-player"></div></div>
+        </div></div>
     </div>
 
-    <div id="cursor"></div>
-    
-    <div id="video-modal">
-        <div class="modal-inner">
-            <div class="modal-content">
-                <div class="close-btn magnetic-target" onclick="closeModal()">CLOSE</div>
-                <div class="video-wrapper"><div id="modal-player"></div></div>
-            </div>
-        </div>
-    </div>
+    <div class="aurora-wrapper" aria-hidden="true"><div class="aurora-blob blob-1"></div><div class="aurora-blob blob-2"></div><div class="aurora-blob blob-3"></div></div>
 
-    <div class="aurora-wrapper">
-        <div class="aurora-blob blob-1"></div>
-        <div class="aurora-blob blob-2"></div>
-        <div class="aurora-blob blob-3"></div>
-    </div>
-
-    <section class="hero">
-        <div class="hero-flex">
+    <main>
+        <section class="hero" aria-labelledby="hero-title"><div class="hero-flex">
             <div class="hero-text">
-                <div class="hero-line"><h1>I'M Independent</h1></div>
+                <div class="hero-line"><h1 id="hero-title">I'm Independent</h1></div>
                 <div class="hero-line"><h1>Video Editor</h1></div>
-                <div class="hero-line"><h1 style="color: var(--accent);">"Orovida"</h1></div>
-                <p class="hero-desc" style="margin-top: 25px; font-size: 15px; color: #888; max-width: 420px; opacity: 0; transform: translateY(20px);">
-                    Creating high-retention cinematic content with a focus on minimalist precision.
-                </p>
+                <div class="hero-line"><h1 class="accent-text">&quot;Orovida&quot;</h1></div>
+                <p class="hero-desc">Creating high-retention cinematic content with a focus on minimalist precision.</p>
             </div>
-            <div class="profile-wrapper">
-                <div class="profile-box" id="profile">
-                    <img src="https://drive.google.com/thumbnail?sz=w2000&id=1HlOPoUOxQXS4VZITzbdmelELop926r3G" alt="Profile">
-                </div>
-            </div>
-        </div>
-    </section>
+            <div class="profile-wrapper"><div class="profile-box" id="profile"><img src="https://drive.google.com/thumbnail?sz=w2000&amp;id=1HlOPoUOxQXS4VZITzbdmelELop926r3G" alt="Orovida profile portrait" width="260" height="260"></div></div>
+        </div></section>
 
-    <section id="about">
-        <span class="section-label reveal-text">About Me</span>
-        <div class="about-content">
-            <p class="about-p reveal-text">I’m Orovida, a video editor focused on clean, cinematic storytelling and high-retention edits.</p>
-            <p class="about-p reveal-text">I’ve been learning and practicing video editing for over <strong>3–4 years</strong>, experimenting with different styles and improving through real projects and personal work.</p>
+        <section id="about" aria-labelledby="about-title"><span class="section-label reveal-text" id="about-title">About Me</span><div class="about-content">
+            <p class="about-p reveal-text">I'm Orovida, a video editor focused on clean, cinematic storytelling and high-retention edits.</p>
+            <p class="about-p reveal-text">I've been learning and practicing video editing for over <strong>3-4 years</strong>, experimenting with different styles and improving through real projects and personal work.</p>
             <p class="about-p reveal-text">I specialize in minimalist edits, smooth pacing, and visuals that support the story without unnecessary effects.</p>
             <p class="about-p reveal-text">Currently available for <strong>freelance collaborations</strong>.</p>
-        </div>
-    </section>
+        </div></section>
 
-    <section id="works">
-        <span class="section-label reveal-text">Selected Works</span>
-        <div class="grid">
-            <div class="video-card magnetic-target reveal-card" onclick="openVideo('podcast edit.mp4')">
-                <div class="thumb-container">
-                    <img src="Podcast Thumbnail.PNG">
-                </div>
-                <div class="video-title">Podcast Video</div>
-            </div>
+        <section id="works" aria-labelledby="works-title"><span class="section-label reveal-text" id="works-title">Selected Works</span><div class="grid">
+            <button class="video-card magnetic-target reveal-card" type="button" data-video="podcast edit.mp4" aria-label="Play Podcast Video"><div class="thumb-container"><img src="Podcast Thumbnail.PNG" alt="Podcast Video thumbnail" loading="lazy" width="1359" height="767"></div><div class="video-title">Podcast Video</div></button>
+            <button class="video-card magnetic-target reveal-card" type="button" data-video="Comming Soon.m4v" aria-label="Play Coming Soon video"><div class="thumb-container"><video muted loop playsinline preload="metadata" aria-label="Coming Soon video preview"><source src="Comming Soon.m4v" type="video/mp4"></video></div><div class="video-title">Coming Soon</div></button>
+        </div></section>
 
-            <div class="video-card magnetic-target reveal-card" 
-                 onmouseenter="this.querySelector('video').play()" 
-                 onmouseleave="this.querySelector('video').pause(); this.querySelector('video').currentTime = 0;"
-                 onclick="openVideo('Comming Soon.m4v')">
-                <div class="thumb-container">
-                    <video muted loop playsinline>
-                        <source src="Comming Soon.m4v" type="video/mp4">
-                    </video>
-                </div>
-                <div class="video-title">Coming Soon</div>
-            </div>
-        </div>
-    </section>
+        <section id="accounts" aria-labelledby="accounts-title"><span class="section-label reveal-text" id="accounts-title">Channels</span><div class="social-list">
+            <a href="https://www.fiverr.com/orovida_yt" target="_blank" rel="noopener noreferrer" class="social-item magnetic-target reveal-card"><span>Fiverr</span><span aria-hidden="true">↗</span></a>
+            <a href="https://www.youtube.com/@Orovida_yt" target="_blank" rel="noopener noreferrer" class="social-item magnetic-target reveal-card"><span>YouTube</span><span aria-hidden="true">↗</span></a>
+            <a href="https://www.instagram.com/orovida_og" target="_blank" rel="noopener noreferrer" class="social-item magnetic-target reveal-card"><span>Instagram</span><span aria-hidden="true">↗</span></a>
+            <a href="https://x.com/Orovida_OG" target="_blank" rel="noopener noreferrer" class="social-item magnetic-target reveal-card"><span>X</span><span aria-hidden="true">↗</span></a>
+        </div></section>
 
-    <section id="accounts">
-        <span class="section-label reveal-text">Channels</span>
-        <div class="social-list">
-            <a href="https://www.fiverr.com/orovida_yt" target="_blank" class="social-item magnetic-target reveal-card"><span>Fiverr</span><span>↗</span></a>
-            <a href="https://www.youtube.com/@Orovida_yt" target="_blank" class="social-item magnetic-target reveal-card"><span>YouTube</span><span>↗</span></a>
-            <a href="https://www.instagram.com/orovida_og" target="_blank" class="social-item magnetic-target reveal-card"><span>Instagram</span><span>↗</span></a>
-            <a href="https://x.com/Orovida_OG" target="_blank" class="social-item magnetic-target reveal-card"><span>X</span><span>↗</span></a>
-        </div>
-    </section>
-
-    <section id="contact" class="collab-wrapper">
-        <div class="collab-card reveal-big">
-            <h2>Have an Idea?</h2>
-            <p style="color: #999; margin-bottom: 40px; font-size: 1.1rem;">Let's build something cinematic together.</p>
-            <a href="mailto:orovidayt@gmail.com?subject=Project Inquiry" class="collab-btn magnetic-target">Start a Project</a>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <p class="copyright">© OROVIDA 2026</p>
-    </footer>
-
-    <script>
-        const cursor = document.getElementById('cursor');
-
-        // --- 1. GLOBAL CURSOR ---
-        window.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
-        });
-
-        // --- 2. MAGNETIC LOGIC ---
-        document.querySelectorAll('.magnetic-target').forEach(el => {
-            el.addEventListener('mouseenter', () => { gsap.to(cursor, { scale: 1.5 }); });
-            el.addEventListener('mouseleave', () => {
-                gsap.to(cursor, { scale: 1 });
-                gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
-            });
-            el.addEventListener('mousemove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const x = (e.clientX - rect.left - rect.width/2) * 0.2; 
-                const y = (e.clientY - rect.top - rect.height/2) * 0.2;
-                gsap.to(el, { x: x, y: y, duration: 0.3 });
-            });
-        });
-
-        // --- 3. LOAD SEQUENCE ---
-        window.addEventListener('load', () => {
-            const tl = gsap.timeline();
-            tl.to(".loader-text", { opacity: 1, duration: 0.5 })
-              .to(".loader-line", { width: "100%", duration: 1, ease: "power2.inOut" })
-              .to(".loader-text", { letterSpacing: "5px", opacity: 0, duration: 0.5 })
-              .to("#loader", { height: 0, duration: 0.8, ease: "power4.inOut" })
-              .to(".hero h1", { y: 0, stagger: 0.1, duration: 1, ease: "power4.out" }, "-=0.4")
-              .to(".hero-desc", { opacity: 1, y: 0, duration: 1 }, "-=0.8")
-              .to(".profile-box", { opacity: 1, scale: 1, rotation: 0, duration: 1.2, ease: "back.out(1.7)" }, "-=1")
-              .to(".profile-box", { className: "profile-box active" }, "-=0.5")
-              .to(".aurora-blob", { opacity: 0.15, scale: 1, duration: 2 }, "-=1.5");
-        });
-
-        // --- 4. SCROLL TRIGGER ---
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.utils.toArray(".reveal-card").forEach((el) => {
-            gsap.to(el, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" } });
-        });
-        gsap.utils.toArray(".reveal-text").forEach(el => {
-            gsap.to(el, { opacity: 1, y: 0, duration: 1, scrollTrigger: { trigger: el, start: "top 90%" } });
-        });
-        gsap.to(".reveal-big", { opacity: 1, scale: 1, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#contact", start: "top 80%" } });
-        gsap.to(".progress-bar", { width: "100%", ease: "none", scrollTrigger: { scrub: 0.3 } });
-
-        // --- 5. MODAL LOGIC (.MP4 & .M4V SUPPORT) ---
-        const modal = document.getElementById('video-modal');
-        function openVideo(file) {
-            const player = document.getElementById('modal-player');
-            // Check if file is a local video or a Google Drive ID
-            const isLocalVideo = file.includes('.mp4') || file.includes('.m4v');
-            
-            if(isLocalVideo) {
-                player.innerHTML = `<video controls autoplay style="width:100%; height:100%;"><source src="${file}" type="video/mp4"></video>`;
-            } else {
-                player.innerHTML = `<iframe src="https://drive.google.com/file/d/${file}/preview" allow="autoplay" allowfullscreen style="width:100%; height:100%; border:none;"></iframe>`;
-            }
-            
-            modal.style.display = 'block';
-            gsap.to(modal, { opacity: 1, duration: 0.4 });
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            gsap.to(modal, { opacity: 0, duration: 0.3, onComplete: () => {
-                modal.style.display = 'none';
-                document.getElementById('modal-player').innerHTML = '';
-                document.body.style.overflow = 'auto';
-            }});
-        }
-        window.addEventListener('keydown', (e) => { if(e.key === "Escape") closeModal(); });
-
-        const lenis = new Lenis();
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-    </script>
+        <section id="contact" class="collab-wrapper" aria-labelledby="contact-title"><div class="collab-card reveal-big"><h2 id="contact-title">Have an Idea?</h2><p>Let's build something cinematic together.</p><a href="mailto:orovidayt@gmail.com?subject=Project%20Inquiry" class="collab-btn magnetic-target">Start a Project</a></div></section>
+    </main>
+    <footer class="footer"><p class="copyright">&copy; OROVIDA 2026</p></footer>
 </body>
 </html>
-
-
-
-
-
-
-
