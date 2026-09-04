@@ -1,14 +1,31 @@
 const cursor = document.getElementById('cursor');
 const moreLinksButton = document.querySelector('.more-links');
-const secondaryLinks = document.getElementById('secondary-links');
+const linksPopup = document.querySelector('.links-popup');
+const linksPopupClose = document.querySelector('.links-popup-close');
+const projectEmailLink = document.querySelector('[data-email-link]');
+let lastFocusedElement = null;
 
-function toggleMoreLinks() {
-    const isExpanded = moreLinksButton.getAttribute('aria-expanded') === 'true';
-    moreLinksButton.setAttribute('aria-expanded', String(!isExpanded));
-    secondaryLinks.hidden = isExpanded;
+function openLinksPopup() {
+    lastFocusedElement = document.activeElement;
+    linksPopup.hidden = false;
+    document.body.style.overflow = 'hidden';
+    linksPopupClose.focus();
 }
 
-moreLinksButton.addEventListener('click', toggleMoreLinks);
+function closeLinksPopup() {
+    linksPopup.hidden = true;
+    document.body.style.overflow = '';
+    lastFocusedElement?.focus();
+}
+
+moreLinksButton.addEventListener('click', openLinksPopup);
+linksPopupClose.addEventListener('click', closeLinksPopup);
+linksPopup.addEventListener('click', (event) => { if (event.target === linksPopup) closeLinksPopup(); });
+window.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !linksPopup.hidden) closeLinksPopup(); });
+
+projectEmailLink.addEventListener('click', () => {
+    window.location.href = projectEmailLink.href;
+});
 
 function animateWithGsap() {
     if (typeof gsap === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
