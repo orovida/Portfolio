@@ -58,6 +58,7 @@ section { padding: 0 10vw; margin-bottom: 15vh; position: relative; z-index: 2; 
 .more-links { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 1rem 1.2rem; color: var(--accent); background: transparent; border: 1px solid var(--border); border-radius: 10px; font: inherit; font-weight: 900; text-align: left; }
 .more-links span { font-size: 1.5rem; font-weight: 400; transition: transform 0.3s ease; }
 .links-popup { position: fixed; inset: 0; z-index: 20000; display: grid; place-items: center; padding: 20px; background: rgba(0,0,0,0.78); backdrop-filter: blur(12px); }
+.links-popup[hidden] { display: none; }
 .links-popup-panel { width: min(100%, 520px); padding: 24px; border: 1px solid var(--border); border-radius: 14px; background: #111; box-shadow: 0 24px 80px rgba(0,0,0,0.55); }
 .links-popup-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .links-popup-header h2 { font-size: 1.5rem; text-transform: uppercase; }
