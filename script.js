@@ -61,16 +61,27 @@ function animateWithGsap() {
 }
 
 if (cursor && typeof gsap !== 'undefined') {
-    window.addEventListener('mousemove', (event) => gsap.to(cursor, { x: event.clientX, y: event.clientY, duration: 0.1 }));
+    let pointerX = 0;
+    let pointerY = 0;
+    let cursorFrame = null;
+    const updateCursor = () => {
+        cursor.style.transform = `translate3d(${pointerX}px, ${pointerY}px, 0) translate(-50%, -50%)`;
+        cursorFrame = null;
+    };
+    window.addEventListener('mousemove', (event) => {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        if (cursorFrame === null) cursorFrame = requestAnimationFrame(updateCursor);
+    }, { passive: true });
     document.querySelectorAll('.magnetic-target').forEach((element) => {
-        element.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 1.5 }));
+        element.addEventListener('mouseenter', () => gsap.to(cursor, { scale: 1.5, duration: 0.15, overwrite: true }));
         element.addEventListener('mouseleave', () => {
-            gsap.to(cursor, { scale: 1 });
-            gsap.to(element, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+            gsap.to(cursor, { scale: 1, duration: 0.15, overwrite: true });
+            gsap.to(element, { x: 0, y: 0, duration: 0.35, ease: 'power2.out', overwrite: true });
         });
         element.addEventListener('mousemove', (event) => {
             const rect = element.getBoundingClientRect();
-            gsap.to(element, { x: (event.clientX - rect.left - rect.width / 2) * 0.2, y: (event.clientY - rect.top - rect.height / 2) * 0.2, duration: 0.3 });
+            gsap.to(element, { x: (event.clientX - rect.left - rect.width / 2) * 0.12, y: (event.clientY - rect.top - rect.height / 2) * 0.12, duration: 0.12, ease: 'power2.out', overwrite: true });
         });
     });
 }
