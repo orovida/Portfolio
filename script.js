@@ -61,33 +61,18 @@ function animateWithGsap() {
 }
 
 if (cursor) {
-    let pointerX = 0;
-    let pointerY = 0;
-    let cursorFrame = null;
-    const updateCursor = () => {
-        cursor.style.transform = `translate3d(${pointerX}px, ${pointerY}px, 0) translate(-50%, -50%)`;
-        cursorFrame = null;
-    };
-    window.addEventListener('mousemove', (event) => {
-        pointerX = event.clientX;
-        pointerY = event.clientY;
+    window.addEventListener('pointermove', (event) => {
+        if (event.pointerType === 'touch') return;
+        cursor.style.setProperty('--cursor-x', `${event.clientX}px`);
+        cursor.style.setProperty('--cursor-y', `${event.clientY}px`);
         cursor.classList.add('cursor-visible');
-        if (cursorFrame === null) cursorFrame = requestAnimationFrame(updateCursor);
     }, { passive: true });
     window.addEventListener('mouseout', (event) => {
         if (!event.relatedTarget) cursor.classList.remove('cursor-visible');
     });
     document.querySelectorAll('.magnetic-target').forEach((element) => {
         element.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-        element.addEventListener('mouseleave', () => {
-            cursor.classList.remove('cursor-hover');
-            if (typeof gsap !== 'undefined') gsap.to(element, { x: 0, y: 0, duration: 0.35, ease: 'power2.out', overwrite: true });
-        });
-        element.addEventListener('mousemove', (event) => {
-            if (typeof gsap === 'undefined') return;
-            const rect = element.getBoundingClientRect();
-            gsap.to(element, { x: (event.clientX - rect.left - rect.width / 2) * 0.12, y: (event.clientY - rect.top - rect.height / 2) * 0.12, duration: 0.12, ease: 'power2.out', overwrite: true });
-        });
+        element.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
     });
 }
 

@@ -23,7 +23,8 @@ body { background-color: var(--bg); color: var(--text); font-family: 'Satoshi', 
 #cursor {
     position: fixed; width: 10px; height: 10px; background: white; border-radius: 50%;
     pointer-events: none; z-index: 100000; mix-blend-mode: difference; opacity: 0;
-    transform: translate(-50%, -50%); transition: width 0.15s, height 0.15s, opacity 0.12s;
+    transform: translate3d(var(--cursor-x, -100px), var(--cursor-y, -100px), 0) translate(-50%, -50%);
+    transition: width 0.15s, height 0.15s, opacity 0.12s; will-change: transform;
 }
 #cursor.cursor-visible { opacity: 1; }
 #cursor.cursor-hover { width: 16px; height: 16px; }
