@@ -73,6 +73,18 @@ if (cursor) {
     document.querySelectorAll('.magnetic-target').forEach((element) => {
         element.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
         element.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        element.addEventListener('mouseleave', () => {
+            if (typeof gsap !== 'undefined') {
+                gsap.to(element, { x: 0, y: 0, duration: 0.35, ease: 'power2.out', overwrite: true });
+            }
+        });
+        element.addEventListener('pointermove', (event) => {
+            if (typeof gsap === 'undefined' || event.pointerType === 'touch') return;
+            const rect = element.getBoundingClientRect();
+            const offsetX = (event.clientX - rect.left - rect.width / 2) * 0.12;
+            const offsetY = (event.clientY - rect.top - rect.height / 2) * 0.12;
+            gsap.to(element, { x: offsetX, y: offsetY, duration: 0.15, ease: 'power2.out', overwrite: true });
+        });
     });
 }
 
