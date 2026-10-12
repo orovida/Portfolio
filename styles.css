@@ -22,9 +22,11 @@ body { background-color: var(--bg); color: var(--text); font-family: 'Satoshi', 
 
 #cursor {
     position: fixed; width: 10px; height: 10px; background: white; border-radius: 50%;
-    pointer-events: none; z-index: 100000; mix-blend-mode: difference;
-    transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s;
+    pointer-events: none; z-index: 100000; mix-blend-mode: difference; opacity: 0;
+    transform: translate(-50%, -50%); transition: width 0.15s, height 0.15s, opacity 0.12s;
 }
+#cursor.cursor-visible { opacity: 1; }
+#cursor.cursor-hover { width: 16px; height: 16px; }
 
 .aurora-wrapper { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .aurora-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; mix-blend-mode: screen; transform: scale(1); }
